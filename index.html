@@ -1,0 +1,704 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DHIScan Academy | لوحة التحكم</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --sidebar-width: 280px;
+            --primary-color: #4361ee;
+            --secondary-color: #3f37c9;
+            --accent-color: #4895ef;
+            --light-color: #f8f9fa;
+            --dark-color: #212529;
+            --danger-color: #f72585;
+        }
+        
+        body {
+            font-family: 'Tajawal', sans-serif;
+            background-color: #f5f7fa;
+            overflow-x: hidden;
+        }
+        
+        /* Sidebar Styles */
+        .sidebar {
+            position: fixed;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            width: var(--sidebar-width);
+            background: linear-gradient(180deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            color: white;
+            padding: 20px 0;
+            box-shadow: 0 0 30px rgba(0,0,0,0.1);
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+        
+        .sidebar-header {
+            padding: 0 20px 20px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            margin-bottom: 20px;
+        }
+        
+        .sidebar-brand {
+            display: flex;
+            align-items: center;
+            color: white;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 1.3rem;
+        }
+        
+        .sidebar-brand i {
+            margin-left: 10px;
+            font-size: 1.5rem;
+        }
+        
+        .sidebar-menu {
+            padding: 0 15px;
+        }
+        
+        .sidebar-menu a {
+            display: flex;
+            align-items: center;
+            color: rgba(255,255,255,0.8);
+            padding: 12px 15px;
+            border-radius: 8px;
+            margin-bottom: 5px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        
+        .sidebar-menu a:hover, .sidebar-menu a.active {
+            background: rgba(255,255,255,0.1);
+            color: white;
+            transform: translateX(-5px);
+        }
+        
+        .sidebar-menu a i {
+            margin-left: 10px;
+            width: 20px;
+            text-align: center;
+        }
+        
+        .sidebar-footer {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            padding: 20px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        /* Main Content Styles */
+        .main-content {
+            margin-right: var(--sidebar-width);
+            padding: 30px;
+            transition: all 0.3s ease;
+        }
+        
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid rgba(0,0,0,0.1);
+        }
+        
+        .page-title {
+            font-weight: 700;
+            color: var(--dark-color);
+            margin: 0;
+        }
+        
+        .user-profile {
+            display: flex;
+            align-items: center;
+        }
+        
+        .user-profile img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            margin-left: 10px;
+        }
+        
+        /* Stats Card Styles */
+        .stats-card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            border: none;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+        
+        .stats-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+        
+        .stats-card .card-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin: 0 auto 15px;
+            background: rgba(67, 97, 238, 0.1);
+            color: var(--primary-color);
+        }
+        
+        .stats-card .card-title {
+            font-size: 0.9rem;
+            color: #6c757d;
+            margin-bottom: 5px;
+        }
+        
+        .stats-card .card-value {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--dark-color);
+            margin: 0;
+        }
+        
+        /* Table Styles */
+        .data-table {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            overflow: hidden;
+        }
+        
+        .table-header {
+            padding: 20px;
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .table-title {
+            font-weight: 700;
+            margin: 0;
+            color: var(--dark-color);
+        }
+        
+        .table-actions {
+            display: flex;
+        }
+        
+        .search-box {
+            position: relative;
+            margin-left: 15px;
+        }
+        
+        .search-box input {
+            padding: 8px 15px 8px 35px;
+            border-radius: 8px;
+            border: 1px solid rgba(0,0,0,0.1);
+            width: 200px;
+        }
+        
+        .search-box i {
+            position: absolute;
+            top: 10px;
+            right: 12px;
+            color: #6c757d;
+        }
+        
+        .table-responsive {
+            padding: 0 20px 20px;
+        }
+        
+        .table {
+            margin-bottom: 0;
+        }
+        
+        .table thead th {
+            border-bottom: none;
+            font-weight: 700;
+            color: var(--dark-color);
+            white-space: nowrap;
+        }
+        
+        .table tbody tr {
+            transition: all 0.3s ease;
+        }
+        
+        .table tbody tr:hover {
+            background: rgba(67, 97, 238, 0.03);
+        }
+        
+        .badge-primary {
+            background-color: rgba(67, 97, 238, 0.1);
+            color: var(--primary-color);
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-weight: 500;
+        }
+        
+        .action-btn {
+            width: 30px;
+            height: 30px;
+            border-radius: 8px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 5px;
+            transition: all 0.3s ease;
+        }
+        
+        .action-btn.edit {
+            background: rgba(67, 97, 238, 0.1);
+            color: var(--primary-color);
+        }
+        
+        .action-btn.edit:hover {
+            background: var(--primary-color);
+            color: white;
+        }
+        
+        .action-btn.delete {
+            background: rgba(247, 37, 133, 0.1);
+            color: var(--danger-color);
+        }
+        
+        .action-btn.delete:hover {
+            background: var(--danger-color);
+            color: white;
+        }
+        
+        /* Modal Styles */
+        .modal-header {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+        
+        .modal-title {
+            font-weight: 700;
+        }
+        
+        .modal-footer {
+            border-top: none;
+        }
+        
+        /* Responsive Styles */
+        @media (max-width: 992px) {
+            .sidebar {
+                transform: translateX(var(--sidebar-width));
+            }
+            
+            .sidebar.active {
+                transform: translateX(0);
+            }
+            
+            .main-content {
+                margin-right: 0;
+            }
+            
+            .toggle-sidebar {
+                display: block !important;
+            }
+        }
+        
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.5s ease forwards;
+        }
+    </style>
+</head>
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <a href="#" class="sidebar-brand">
+                <i class="fas fa-graduation-cap"></i>
+                DHIScan Academy
+            </a>
+        </div>
+        
+        <div class="sidebar-menu">
+            <a href="#" class="active">
+                <i class="fas fa-tachometer-alt"></i>
+                لوحة التحكم
+            </a>
+        </div>
+        
+        <div class="sidebar-footer">
+            <div class="d-flex align-items-center">
+                <img src="https://ui-avatars.com/api/?name=مدير+النظام&background=4361ee&color=fff" alt="User" class="rounded-circle">
+                <div>
+                    <h6 class="mb-0">مدير النظام</h6>
+                    <small class="text-muted">Admin</small>
+                </div>
+                <a href="#" class="text-white ms-auto">
+                    <i class="fas fa-sign-out-alt"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Header -->
+        <div class="header">
+            <button class="btn btn-outline-primary toggle-sidebar d-none">
+                <i class="fas fa-bars"></i>
+            </button>
+            
+            <h1 class="page-title">إدارة الطلاب</h1>
+            
+            <div class="user-profile">
+                <img src="https://ui-avatars.com/api/?name=مدير+النظام&background=4361ee&color=fff" alt="User">
+                <div class="dropdown">
+                    <button class="btn btn-link dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown">
+                        مرحباً، مدير النظام
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li><a class="dropdown-item" href="#"><i class="fas fa-user me-2"></i> الملف الشخصي</a></li>
+                        <li><a class="dropdown-item" href="#"><i class="fas fa-cog me-2"></i> الإعدادات</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="#"><i class="fas fa-sign-out-alt me-2"></i> تسجيل الخروج</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Stats Card -->
+        <div class="row fade-in">
+            <div class="col-md-12">
+                <div class="stats-card">
+                    <div class="card-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <h6 class="card-title">إجمالي الطلاب المسجلين</h6>
+                    <h3 class="card-value" id="totalStudents">0</h3>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Students Table -->
+        <div class="data-table fade-in" style="animation-delay: 0.2s;">
+            <div class="table-header">
+                <h3 class="table-title">الطلاب المسجلين</h3>
+                
+                <div class="table-actions">
+                    <div class="search-box">
+                        <i class="fas fa-search"></i>
+                        <input type="text" id="searchName" placeholder="بحث...">
+                    </div>
+                    
+                    <div class="dropdown">
+                    </div>
+                </div>
+            </div>
+            
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>الاسم</th>
+                            <th>المحافظة</th>
+                            <th>رقم الهاتف</th>
+                            <th>المرحلة</th>
+                            <th>التسجيل</th>
+                            <th>الإجراءات</th>
+                        </tr>
+                    </thead>
+                    <tbody id="studentsTable">
+                        <!-- Students data will be loaded here -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Student Modal -->
+    <div class="modal fade" id="editStudentModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">تعديل بيانات الطالب</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="editStudentForm">
+                        <input type="hidden" id="editStudentId">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="editFullName" class="form-label">الاسم الثلاثي</label>
+                                    <input type="text" class="form-control" id="editFullName" required>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="editGovernorate" class="form-label">المحافظة</label>
+                                    <input type="text" class="form-control" id="editGovernorate" required>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="editAddress" class="form-label">العنوان</label>
+                                    <input type="text" class="form-control" id="editAddress" required>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="editPhone" class="form-label">رقم الهاتف</label>
+                                    <input type="tel" class="form-control" id="editPhone" required>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="editEducationLevel" class="form-label">المرحلة الدراسية</label>
+                            <select class="form-select" id="editEducationLevel" required>
+                                <option value="المرحلة الاولى">المرحلة الاولى</option>
+                                <option value="المرحلة الثانية">المرحلة الثانية</option>
+                                <option value="المرحلة الثالثة">المرحلة الثالثة</option>
+                                <option value="المرحلة الرابعة">المرحلة الرابعة</option>
+                                <option value="خريج">خريج</option>
+                            </select>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">إلغاء</button>
+                    <button type="button" class="btn btn-primary" id="saveEditBtn">حفظ التغييرات</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Firebase SDK -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-app.js";
+        import { getDatabase, ref, onValue, update, remove } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-database.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyAHee7N7_epjBzDxFgScSDP7PwRD-Zf7uI",
+            authDomain: "alipay-5f8b3.firebaseapp.com",
+            databaseURL: "https://alipay-5f8b3-default-rtdb.firebaseio.com",
+            projectId: "alipay-5f8b3",
+            storageBucket: "alipay-5f8b3.firebasestorage.app",
+            messagingSenderId: "89272268",
+            appId: "1:89272268:web:fe2d56e910dea32ccc7769",
+            measurementId: "G-QG0M4RRM03"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const database = getDatabase(app);
+        const studentsRef = ref(database, 'students');
+
+        let studentsData = {};
+        let currentFilter = { level: 'all' };
+
+        // Initialize modal and sidebar toggle
+        document.addEventListener('DOMContentLoaded', function() {
+            const editModal = new bootstrap.Modal(document.getElementById('editStudentModal'));
+            
+            // Toggle sidebar on mobile
+            document.querySelector('.toggle-sidebar').addEventListener('click', function() {
+                document.querySelector('.sidebar').classList.toggle('active');
+            });
+            
+            // Setup dropdown filters
+            document.querySelectorAll('#filterLevel .dropdown-item').forEach(item => {
+                item.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    currentFilter.level = this.getAttribute('data-value');
+                    document.querySelector('#filterLevel').textContent = 
+                        currentFilter.level === 'all' ? 'المرحلة الدراسية' : this.textContent;
+                    filterStudents();
+                });
+            });
+            
+            // Setup search input
+            document.getElementById('searchName').addEventListener('input', filterStudents);
+            
+            // Setup save edit button
+            document.getElementById('saveEditBtn').addEventListener('click', saveStudentChanges);
+            
+            // Load students data
+            loadStudents();
+        });
+
+        function loadStudents() {
+            onValue(studentsRef, (snapshot) => {
+                studentsData = snapshot.val() || {};
+                updateStats();
+                filterStudents();
+            });
+        }
+
+        function updateStats() {
+            let total = 0;
+            
+            for (const studentId in studentsData) {
+                total++;
+            }
+            
+            document.getElementById('totalStudents').textContent = total;
+        }
+
+        function filterStudents() {
+            const nameSearch = document.getElementById('searchName').value.toLowerCase();
+            const tableBody = document.getElementById('studentsTable');
+            tableBody.innerHTML = '';
+            
+            let counter = 1;
+            
+            for (const studentId in studentsData) {
+                const student = studentsData[studentId];
+                
+                // Apply filters
+                if (currentFilter.level !== 'all' && student.educationLevel !== currentFilter.level) continue;
+                if (nameSearch && !student.fullName.toLowerCase().includes(nameSearch)) continue;
+                
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${counter}</td>
+                    <td>
+                        <div class="d-flex align-items-center">
+                            <img src="https://ui-avatars.com/api/?name=${encodeURIComponent(student.fullName)}&background=random&size=40" 
+                                 alt="${student.fullName}" class="rounded-circle me-3" width="40" height="40">
+                            <div>
+                                <h6 class="mb-0">${student.fullName}</h6>
+                                <small class="text-muted">${student.governorate}</small>
+                            </div>
+                        </div>
+                    </td>
+                    <td>${student.governorate}</td>
+                    <td>${student.phone}</td>
+                    <td><span class="badge-primary">${student.educationLevel}</span></td>
+                    <td>${formatDate(student.timestamp)}</td>
+                    <td>
+                        <button class="action-btn edit" onclick="editStudent('${studentId}')">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="action-btn delete" onclick="deleteStudent('${studentId}')">
+                            <i class="fas fa-trash-alt"></i>
+                        </button>
+                    </td>
+                `;
+                tableBody.appendChild(row);
+                counter++;
+            }
+        }
+
+        function formatDate(timestamp) {
+            const date = new Date(timestamp);
+            return date.toLocaleDateString('ar-EG', {
+                year: 'numeric',
+                month: 'short',
+                day: 'numeric'
+            });
+        }
+
+        window.editStudent = function(studentId) {
+            const student = studentsData[studentId];
+            
+            document.getElementById('editStudentId').value = studentId;
+            document.getElementById('editFullName').value = student.fullName;
+            document.getElementById('editGovernorate').value = student.governorate;
+            document.getElementById('editAddress').value = student.address;
+            document.getElementById('editPhone').value = student.phone;
+            document.getElementById('editEducationLevel').value = student.educationLevel;
+            
+            const modal = new bootstrap.Modal(document.getElementById('editStudentModal'));
+            modal.show();
+        }
+
+        function saveStudentChanges() {
+            const studentId = document.getElementById('editStudentId').value;
+            const updates = {
+                fullName: document.getElementById('editFullName').value,
+                governorate: document.getElementById('editGovernorate').value,
+                address: document.getElementById('editAddress').value,
+                phone: document.getElementById('editPhone').value,
+                educationLevel: document.getElementById('editEducationLevel').value,
+                updatedAt: new Date().toISOString()
+            };
+            
+            update(ref(database, `students/${studentId}`), updates)
+                .then(() => {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'تم التحديث!',
+                        text: 'تم تحديث بيانات الطالب بنجاح',
+                        confirmButtonText: 'حسناً',
+                        confirmButtonColor: '#4361ee'
+                    });
+                    const modal = bootstrap.Modal.getInstance(document.getElementById('editStudentModal'));
+                    modal.hide();
+                })
+                .catch((error) => {
+                    console.error('Error updating student: ', error);
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'خطأ!',
+                        text: 'حدث خطأ أثناء تحديث البيانات',
+                        confirmButtonText: 'حسناً',
+                        confirmButtonColor: '#f72585'
+                    });
+                });
+        }
+
+        window.deleteStudent = function(studentId) {
+            Swal.fire({
+                title: 'هل أنت متأكد؟',
+                text: "لن تتمكن من استعادة هذه البيانات!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#f72585',
+                cancelButtonColor: '#6c757d',
+                confirmButtonText: 'نعم، احذف!',
+                cancelButtonText: 'إلغاء'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    remove(ref(database, `students/${studentId}`))
+                        .then(() => {
+                            Swal.fire(
+                                'تم الحذف!',
+                                'تم حذف بيانات الطالب بنجاح.',
+                                'success'
+                            );
+                        })
+                        .catch((error) => {
+                            console.error('Error deleting student: ', error);
+                            Swal.fire(
+                                'خطأ!',
+                                'حدث خطأ أثناء محاولة الحذف.',
+                                'error'
+                            );
+                        });
+                }
+            });
+        }
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+</body>
+</html>
