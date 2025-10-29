@@ -414,7 +414,7 @@
                         <tr>
                             <th>#</th>
                             <th>الاسم</th>
-                            <th>المحافظة</th>
+                            <th>الجامعة</th>
                             <th>رقم الهاتف</th>
                             <th>نوع  التدريب</th>
                             <th>التسجيل</th>
@@ -449,19 +449,20 @@
                             </div>
                             <div class="col-md-6">
                                 <div class="mb-3">
-                                    <label for="editGovernorate" class="form-label">المحافظة</label>
+                                    <label for="editGovernorate" class="form-label">الجامعة</label>
                                     <input type="text" class="form-control" id="editGovernorate" required>
                                 </div>
                             </div>
                         </div>
                         
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="mb-3">
-                                    <label for="editAddress" class="form-label">العنوان</label>
-                                    <input type="text" class="form-control" id="editAddress" required>
-                                </div>
-                            </div>
+                         <div class="mb-4">
+                            <label for="gender" class="form-label">الجنس</label>
+                            <select class="form-select" id="gender" required>
+                                <option value="" selected disabled>اختر الجنس</option>
+                                <option value="ذكر">ذكر</option>
+                                <option value="أنثى">أنثى</option>
+                            </select>
+                        </div>
                             <div class="col-md-6">
                                 <div class="mb-3">
                                     <label for="editPhone" class="form-label">رقم الهاتف</label>
@@ -702,3 +703,4 @@
 </body>
 
 </html>
+
