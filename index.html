@@ -415,8 +415,9 @@
                             <th>#</th>
                             <th>الاسم</th>
                             <th>الجامعة</th>
+                            <th>الجنس</th>
                             <th>رقم الهاتف</th>
-                            <th>نوع  التدريب</th>
+                            <th>نوع التدريب</th>
                             <th>التسجيل</th>
                             <th>الإجراءات</th>
                         </tr>
@@ -449,20 +450,23 @@
                             </div>
                             <div class="col-md-6">
                                 <div class="mb-3">
-                                    <label for="editGovernorate" class="form-label">الجامعة</label>
-                                    <input type="text" class="form-control" id="editGovernorate" required>
+                                    <label for="editUniversity" class="form-label">الجامعة</label>
+                                    <input type="text" class="form-control" id="editUniversity" required>
                                 </div>
                             </div>
                         </div>
                         
-                         <div class="mb-4">
-                            <label for="gender" class="form-label">الجنس</label>
-                            <select class="form-select" id="gender" required>
-                                <option value="" selected disabled>اختر الجنس</option>
-                                <option value="ذكر">ذكر</option>
-                                <option value="أنثى">أنثى</option>
-                            </select>
-                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="editGender" class="form-label">الجنس</label>
+                                    <select class="form-select" id="editGender" required>
+                                        <option value="" selected disabled>اختر الجنس</option>
+                                        <option value="ذكر">ذكر</option>
+                                        <option value="أنثى">أنثى</option>
+                                    </select>
+                                </div>
+                            </div>
                             <div class="col-md-6">
                                 <div class="mb-3">
                                     <label for="editPhone" class="form-label">رقم الهاتف</label>
@@ -471,10 +475,10 @@
                             </div>
                         </div>
                         
-                        <div class="mb-4">
-                            <label for="educationLevel" class="form-label">الاجهزة التي تريد التدرب عليها</label>
-                            <select class="form-select" id="educationLevel" required>
-                                <option value="" selected disabled>اختر الاجهزة </option>
+                        <div class="mb-3">
+                            <label for="editDevices" class="form-label">الاجهزة التي تريد التدرب عليها</label>
+                            <select class="form-select" id="editDevices" required>
+                                <option value="" selected disabled>اختر الاجهزة</option>
                                 <option value="MRI + CT">MRI + CT</option>
                                 <option value="MRI + CT + XRAY">MRI + CT + XRAY</option>
                                 <option value="XRAY فقط">XRAY فقط</option>
@@ -522,17 +526,6 @@
                 document.querySelector('.sidebar').classList.toggle('active');
             });
             
-            // Setup dropdown filters
-            document.querySelectorAll('#filterLevel .dropdown-item').forEach(item => {
-                item.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    currentFilter.level = this.getAttribute('data-value');
-                    document.querySelector('#filterLevel').textContent = 
-                        currentFilter.level === 'all' ? 'المرحلة الدراسية' : this.textContent;
-                    filterStudents();
-                });
-            });
-            
             // Setup search input
             document.getElementById('searchName').addEventListener('input', filterStudents);
             
@@ -572,7 +565,6 @@
                 const student = studentsData[studentId];
                 
                 // Apply filters
-                if (currentFilter.level !== 'all' && student.educationLevel !== currentFilter.level) continue;
                 if (nameSearch && !student.fullName.toLowerCase().includes(nameSearch)) continue;
                 
                 const row = document.createElement('tr');
@@ -584,13 +576,14 @@
                                  alt="${student.fullName}" class="rounded-circle me-3" width="40" height="40">
                             <div>
                                 <h6 class="mb-0">${student.fullName}</h6>
-                                <small class="text-muted">${student.governorate}</small>
+                                <small class="text-muted">${student.university || 'غير محدد'}</small>
                             </div>
                         </div>
                     </td>
-                    <td>${student.governorate}</td>
-                    <td>${student.phone}</td>
-                    <td><span class="badge-primary">${student.educationLevel}</span></td>
+                    <td>${student.university || 'غير محدد'}</td>
+                    <td>${student.gender || 'غير محدد'}</td>
+                    <td>${student.phone || 'غير محدد'}</td>
+                    <td><span class="badge-primary">${student.devices || 'غير محدد'}</span></td>
                     <td>${formatDate(student.timestamp)}</td>
                     <td>
                         <button class="action-btn edit" onclick="editStudent('${studentId}')">
@@ -607,6 +600,8 @@
         }
 
         function formatDate(timestamp) {
+            if (!timestamp) return 'غير محدد';
+            
             const date = new Date(timestamp);
             return date.toLocaleDateString('ar-EG', {
                 year: 'numeric',
@@ -619,11 +614,11 @@
             const student = studentsData[studentId];
             
             document.getElementById('editStudentId').value = studentId;
-            document.getElementById('editFullName').value = student.fullName;
-            document.getElementById('editGovernorate').value = student.governorate;
-            document.getElementById('editAddress').value = student.address;
-            document.getElementById('editPhone').value = student.phone;
-            document.getElementById('editEducationLevel').value = student.educationLevel;
+            document.getElementById('editFullName').value = student.fullName || '';
+            document.getElementById('editUniversity').value = student.university || '';
+            document.getElementById('editGender').value = student.gender || '';
+            document.getElementById('editPhone').value = student.phone || '';
+            document.getElementById('editDevices').value = student.devices || '';
             
             const modal = new bootstrap.Modal(document.getElementById('editStudentModal'));
             modal.show();
@@ -633,10 +628,10 @@
             const studentId = document.getElementById('editStudentId').value;
             const updates = {
                 fullName: document.getElementById('editFullName').value,
-                governorate: document.getElementById('editGovernorate').value,
-                address: document.getElementById('editAddress').value,
+                university: document.getElementById('editUniversity').value,
+                gender: document.getElementById('editGender').value,
                 phone: document.getElementById('editPhone').value,
-                educationLevel: document.getElementById('editEducationLevel').value,
+                devices: document.getElementById('editDevices').value,
                 updatedAt: new Date().toISOString()
             };
             
@@ -701,6 +696,4 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
 </body>
-
 </html>
-
