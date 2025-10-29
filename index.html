@@ -416,7 +416,7 @@
                             <th>الاسم</th>
                             <th>المحافظة</th>
                             <th>رقم الهاتف</th>
-                            <th>المرحلة</th>
+                            <th>نوع  التدريب</th>
                             <th>التسجيل</th>
                             <th>الإجراءات</th>
                         </tr>
@@ -470,14 +470,13 @@
                             </div>
                         </div>
                         
-                        <div class="mb-3">
-                            <label for="editEducationLevel" class="form-label">المرحلة الدراسية</label>
-                            <select class="form-select" id="editEducationLevel" required>
-                                <option value="المرحلة الاولى">المرحلة الاولى</option>
-                                <option value="المرحلة الثانية">المرحلة الثانية</option>
-                                <option value="المرحلة الثالثة">المرحلة الثالثة</option>
-                                <option value="المرحلة الرابعة">المرحلة الرابعة</option>
-                                <option value="خريج">خريج</option>
+                        <div class="mb-4">
+                            <label for="educationLevel" class="form-label">الاجهزة التي تريد التدرب عليها</label>
+                            <select class="form-select" id="educationLevel" required>
+                                <option value="" selected disabled>اختر الاجهزة </option>
+                                <option value="MRI + CT">MRI + CT</option>
+                                <option value="MRI + CT + XRAY">MRI + CT + XRAY</option>
+                                <option value="XRAY فقط">XRAY فقط</option>
                             </select>
                         </div>
                     </form>
@@ -701,4 +700,5 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
 </body>
+
 </html>
